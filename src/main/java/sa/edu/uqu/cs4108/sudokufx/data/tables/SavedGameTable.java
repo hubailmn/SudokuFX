@@ -1,8 +1,10 @@
 package sa.edu.uqu.cs4108.sudokufx.data.tables;
 
+import sa.edu.uqu.cs4108.sudokufx.data.DatabaseConnection;
 import sa.edu.uqu.cs4108.sudokufx.data.DatabaseTable;
 
 public class SavedGameTable implements DatabaseTable {
+
     @Override
     public String getName() {
         return "saved_games";
@@ -21,6 +23,14 @@ public class SavedGameTable implements DatabaseTable {
                 );
                 """, getName()
         );
+    }
+
+    public void saveGame(String difficulty, String currentGrid, int time) {
+        String query = String.format(
+                "INSERT INTO saved_games (difficulty, elapsed_time, current_grid) VALUES ('%s', %d, '%s')",
+                difficulty, time, currentGrid
+        );
+        DatabaseConnection.getInstance().executeQuery(query);
     }
 
 

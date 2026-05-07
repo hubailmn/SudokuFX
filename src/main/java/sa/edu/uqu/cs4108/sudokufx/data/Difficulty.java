@@ -1,24 +1,19 @@
 package sa.edu.uqu.cs4108.sudokufx.data;
 
 public enum Difficulty {
-    FLASH(25),
-    EASY(35),
-    MEDIUM(45),
-    HARD(55),
-    EXPERT(65);
+    FLASH(20), EASY(30), MEDIUM(40), HARD(50), EXPERT(60);
 
-    final int missingCells;
+    private final int cellsToRemove;
 
-    Difficulty(int missingCells) {
-        this.missingCells = missingCells;
+    Difficulty(int cellsToRemove) {
+        this.cellsToRemove = cellsToRemove;
     }
 
-    public int getMissingCells() {
-        return missingCells;
+    public int getCellsToRemove() {
+        return cellsToRemove;
     }
 
-    public Difficulty getDifficulty(String difficulty) {
-        return Difficulty.valueOf(difficulty.toUpperCase());
+    public static Difficulty fromString(String text) {
+        return Difficulty.valueOf(text.toUpperCase());
     }
-
 }

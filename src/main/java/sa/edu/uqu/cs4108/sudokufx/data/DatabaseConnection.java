@@ -48,6 +48,10 @@ public class DatabaseConnection {
         });
     }
 
+    public static DatabaseConnection getInstance() {
+        return instance == null ? instance = new DatabaseConnection() : instance;
+    }
+
     public Connection getConnection() {
         if (connection != null) {
             return connection;
