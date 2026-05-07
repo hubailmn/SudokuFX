@@ -1,0 +1,61 @@
+package sa.edu.uqu.cs4108.sudokufx.data;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class DatabaseConnection {
+
+    private Connection connection;
+
+    public DatabaseConnection() {
+        this.connection = null;
+        try {
+            connect();
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Connection getConnection() {
+        if (connection != null) {
+            return connection;
+        }
+
+        try {
+            System.out.println("initializing a new Database Connection.");
+            connect();
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        return connection;
+    }
+
+    public void executeQuery(String query) {
+        try (Statement statement = getConnection().createStatement()) {
+            statement.executeUpdate(query)
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void connect() throws SQLException, IOException {
+        String DATABASE_FILE_PATH = "suduku.db";
+        File databaseFile = new File(DATABASE_FILE_PATH);
+
+        if (!databaseFile.exists()) {
+            boolean created = databaseFile.createNewFile();
+        }
+
+        this.connection = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_FILE_PATH);
+    }
+
+    private void closeConnection() throws SQLException {
+        if (!getConnection().isClosed() && getConnection() != null) {
+            getConnection().close();
+        }
+    }
+}
