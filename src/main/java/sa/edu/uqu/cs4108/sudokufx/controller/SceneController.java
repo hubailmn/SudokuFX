@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import sa.edu.uqu.cs4108.sudokufx.data.Difficulty;
 import sa.edu.uqu.cs4108.sudokufx.view.MainMenuView;
 import sa.edu.uqu.cs4108.sudokufx.view.game.DifficultyMenuView;
 import sa.edu.uqu.cs4108.sudokufx.view.game.GameView;
@@ -29,7 +30,7 @@ public class SceneController {
     }
 
     public void startGame(String difficulty) {
-        GameView view = new GameView(this, difficulty);
+        GameView view = new GameView(this, Difficulty.fromString(difficulty));
         switchTo(view);
     }
 
