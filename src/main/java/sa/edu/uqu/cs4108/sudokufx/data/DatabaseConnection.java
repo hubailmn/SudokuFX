@@ -1,23 +1,51 @@
 package sa.edu.uqu.cs4108.sudokufx.data;
 
+import sa.edu.uqu.cs4108.sudokufx.data.tables.LeaderboardTable;
+import sa.edu.uqu.cs4108.sudokufx.data.tables.SavedGameTable;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseConnection {
 
     private Connection connection;
+    private static DatabaseConnection instance;
+
+    private static final List<DatabaseTable> tablesList = new ArrayList<>(
+            List.of(
+                    new LeaderboardTable(),
+                    new SavedGameTable()
+            )
+    );
 
     public DatabaseConnection() {
+//        dropTables();
+
         this.connection = null;
         try {
             connect();
         } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
         }
+
+        tablesList.forEach(table -> {
+            System.out.println("Generating table " + table.getClass().getSimpleName());
+            executeQuery(table.generateTable());
+        });
+
+    }
+
+    private void dropTables() {
+        tablesList.forEach(table -> {
+            System.out.println("Dropping table " + table.getClass().getSimpleName());
+            executeQuery("drop table if exists " + table.getName());
+        });
     }
 
     public Connection getConnection() {
@@ -36,7 +64,7 @@ public class DatabaseConnection {
 
     public void executeQuery(String query) {
         try (Statement statement = getConnection().createStatement()) {
-            statement.executeUpdate(query)
+            statement.executeUpdate(query);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
