@@ -1,12 +1,14 @@
 package sa.edu.uqu.cs4108.sudokufx.view.game;
 
 import javafx.animation.FadeTransition;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
 import sa.edu.uqu.cs4108.sudokufx.controller.SceneController;
+import sa.edu.uqu.cs4108.sudokufx.data.Difficulty;
 import sa.edu.uqu.cs4108.sudokufx.view.AbstractView;
+
+import java.util.Arrays;
 
 public class DifficultyMenuView extends AbstractView {
 
@@ -16,7 +18,10 @@ public class DifficultyMenuView extends AbstractView {
         selectLabel.setStyle("-fx-font-size: 36px; -fx-text-fill: #ecf0f1; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);");
         getChildren().add(selectLabel);
 
-        String[] levels = {"Flash", "Easy", "Medium", "Hard", "Expert"};
+        String[] levels = Arrays.stream(Difficulty.values())
+                .map(Enum::name)
+                .toArray(String[]::new);
+
         for (String level : levels) {
             Button b = new Button(level);
             styleButton(b);

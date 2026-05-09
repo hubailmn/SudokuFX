@@ -22,7 +22,7 @@ public class MainMenuView extends AbstractView {
         title = new Label("SudokuFX");
         title.setStyle("-fx-font-size: 48px; -fx-text-fill: #ecf0f1; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);");
 
-        subtitle = new Label("hubailmn");
+        subtitle = new Label("Beta Version");
         subtitle.setStyle("-fx-font-size: 14px; -fx-text-fill: #bdc3c7; -fx-letter-spacing: 2px;");
 
         playButton = new Button("Play");

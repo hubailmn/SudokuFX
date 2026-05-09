@@ -21,6 +21,7 @@ import sa.edu.uqu.cs4108.sudokufx.view.AbstractView;
 
 public class GameView extends AbstractView {
 
+    private Difficulty difficulty;
     private static final int DECAY_INTERVAL_SECONDS = 90;
 
     private final TextField[][] cells = new TextField[9][9];
@@ -41,6 +42,7 @@ public class GameView extends AbstractView {
 
     public GameView(SceneController nav, Difficulty difficulty) {
         super();
+        this.difficulty = difficulty;
 
         SudokuGenerator generator = new SudokuGenerator();
         int[][] full = generator.generate();
@@ -182,7 +184,7 @@ public class GameView extends AbstractView {
                 pause.play();
 
                 mistakes++;
-                multiplier = Math.max(1, multiplier - 4);
+                multiplier = Math.max(1, difficulty.getMultiplier() - (mistakes / 4));
                 statusLabel.setTextFill(Color.web("#e74c3c"));
                 statusLabel.setText("✗ Wrong! Multiplier reset. Mistakes: " + mistakes);
                 SoundManager.playFah();
