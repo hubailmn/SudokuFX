@@ -14,14 +14,13 @@ public class MainMenuView extends AbstractView {
 
     private Button playButton;
     private Button statsButton;
-    private Button helpButton;
     private Button aboutButton;
 
     public MainMenuView(SceneController nav) {
         title = new Label("SudokuFX");
         title.setStyle("-fx-font-size: 48px; -fx-text-fill: #ecf0f1; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 0);");
 
-        subtitle = new Label("hubailmn");
+        subtitle = new Label("Jamoum University");
         subtitle.setStyle("-fx-font-size: 14px; -fx-text-fill: #bdc3c7; -fx-letter-spacing: 2px;");
 
         playButton = new Button("Play");
@@ -30,7 +29,6 @@ public class MainMenuView extends AbstractView {
 
         styleButton(playButton);
         styleButton(statsButton);
-        styleButton(helpButton);
         styleButton(aboutButton);
 
         playButton.setOnAction(e -> nav.showDifficultyMenu());
@@ -39,7 +37,7 @@ public class MainMenuView extends AbstractView {
 
         getChildren().addAll(
                 title, subtitle,
-                playButton, statsButton, helpButton, aboutButton);
+                playButton, statsButton, aboutButton);
 
         this.setOpacity(0);
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(1.5), this);

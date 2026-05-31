@@ -1,6 +1,7 @@
 package sa.edu.uqu.cs4108.sudokufx.view;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import sa.edu.uqu.cs4108.sudokufx.controller.SceneController;
@@ -75,8 +76,13 @@ public class StatsView extends AbstractView {
 
                 card.getChildren().add(noRecord);
             }
-
             getChildren().add(card);
         });
+
+        Button backBtn = new javafx.scene.control.Button("Back to Menu");
+        styleButton(backBtn, 200);
+        backBtn.setOnAction(e -> nav.showMainMenu());
+
+        getChildren().add(backBtn);
     }
 }

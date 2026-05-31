@@ -189,7 +189,7 @@ public class GameView extends AbstractView {
 
     // --- Tracker Logic ---
     private void updateNumberTracker() {
-        int[] counts = new int[10]; // index 1-9
+        int[] counts = new int[10];
         for (int r = 0; r < 9; r++) {
             for (int c = 0; c < 9; c++) {
                 String text = cells[r][c].getText();

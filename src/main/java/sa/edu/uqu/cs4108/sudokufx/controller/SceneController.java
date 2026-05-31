@@ -6,11 +6,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import sa.edu.uqu.cs4108.sudokufx.data.Difficulty;
+import sa.edu.uqu.cs4108.sudokufx.view.AboutView;
 import sa.edu.uqu.cs4108.sudokufx.view.MainMenuView;
 import sa.edu.uqu.cs4108.sudokufx.view.StatsView;
 import sa.edu.uqu.cs4108.sudokufx.view.game.DifficultyMenuView;
 import sa.edu.uqu.cs4108.sudokufx.view.game.GameView;
-import sa.edu.uqu.cs4108.sudokufx.view.help.AboutView;
 
 public class SceneController {
     private final StackPane root;
