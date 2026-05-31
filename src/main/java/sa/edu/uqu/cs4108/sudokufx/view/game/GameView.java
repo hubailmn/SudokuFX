@@ -181,7 +181,7 @@ public class GameView extends AbstractView {
                 multiplier = Math.max(1, difficulty.getMultiplier() - (mistakes / 4));
                 statusLabel.setTextFill(Color.web("#e74c3c"));
                 statusLabel.setText("Wrong Number! Mistakes: " + mistakes);
-                SoundManager.playFah();
+                SoundManager.playDeny();
                 updateHud();
             }
         });
