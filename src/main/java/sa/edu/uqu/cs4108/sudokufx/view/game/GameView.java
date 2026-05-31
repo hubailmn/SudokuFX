@@ -21,11 +21,13 @@ import sa.edu.uqu.cs4108.sudokufx.view.AbstractView;
 
 public class GameView extends AbstractView {
 
-    private Difficulty difficulty;
+    private final Difficulty difficulty;
     private static final int DECAY_INTERVAL_SECONDS = 90;
 
     private final TextField[][] cells = new TextField[9][9];
     private final int[][] solution;
+
+    private final Label[] numberLabels = new Label[9];
 
     private int elapsedSeconds = 0;
     private int score = 0;
@@ -58,8 +60,6 @@ public class GameView extends AbstractView {
         styleHudLabel(mistakesLabel);
         statusLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold;");
 
-        updateHud();
-
         HBox hud = new HBox(28, timerLabel, scoreLabel, multiplierLabel, mistakesLabel);
         hud.setAlignment(Pos.CENTER);
 
@@ -83,7 +83,21 @@ public class GameView extends AbstractView {
             }
         }
 
+        // --- Number Tracker Layout ---
+        HBox numberTracker = new HBox(15);
+        numberTracker.setAlignment(Pos.CENTER);
+        numberTracker.setPadding(new Insets(10, 0, 10, 0));
+        for (int i = 0; i < 9; i++) {
+            numberLabels[i] = new Label(String.valueOf(i + 1));
+            numberLabels[i].setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #95a5a6;");
+            numberTracker.getChildren().add(numberLabels[i]);
+        }
+
+        updateHud();
+        updateNumberTracker();
+
         Button backBtn = new Button("← Back to Menu");
+
         backBtn.setStyle("""
                 -fx-background-color: transparent;
                 -fx-text-fill: #95a5a6;
@@ -93,30 +107,12 @@ public class GameView extends AbstractView {
                 -fx-background-radius: 8;
                 -fx-padding: 6 14 6 14;
                 """);
-        backBtn.setOnMouseEntered(e -> backBtn.setStyle("""
-                -fx-background-color: rgba(255,255,255,0.08);
-                -fx-text-fill: #ecf0f1;
-                -fx-font-size: 13px;
-                -fx-border-color: rgba(255,255,255,0.3);
-                -fx-border-radius: 8;
-                -fx-background-radius: 8;
-                -fx-padding: 6 14 6 14;
-                """));
-        backBtn.setOnMouseExited(e -> backBtn.setStyle("""
-                -fx-background-color: transparent;
-                -fx-text-fill: #95a5a6;
-                -fx-font-size: 13px;
-                -fx-border-color: rgba(255,255,255,0.15);
-                -fx-border-radius: 8;
-                -fx-background-radius: 8;
-                -fx-padding: 6 14 6 14;
-                """));
         backBtn.setOnAction(e -> {
             stopTimer();
             nav.showMainMenu();
         });
 
-        VBox wrapper = new VBox(14, hud, grid, statusLabel, backBtn);
+        VBox wrapper = new VBox(14, hud, grid, numberTracker, statusLabel, backBtn);
         wrapper.setAlignment(Pos.CENTER);
         getChildren().add(wrapper);
 
@@ -129,7 +125,6 @@ public class GameView extends AbstractView {
             cell.setEditable(false);
             applyPrefilledStyle(cell);
 
-            // Highlight matching numbers on click
             cell.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
                 if (isFocused) highlightMatching(cell.getText());
                 else clearAllHighlights();
@@ -158,20 +153,21 @@ public class GameView extends AbstractView {
             int entered = Integer.parseInt(newV);
             if (entered == solution[r][c]) {
                 cell.setEditable(false);
-
                 applyCorrectFlash(cell);
+
                 PauseTransition pause = new PauseTransition(Duration.millis(500));
                 pause.setOnFinished(e -> {
                     applyPrefilledStyle(cell);
                     highlightMatching(String.valueOf(entered));
                 });
                 pause.play();
-                highlightMatching(String.valueOf(entered));
 
                 score += entered * multiplier;
                 statusLabel.setTextFill(Color.web("#2ecc71"));
                 statusLabel.setText("✓ Correct! +" + (entered * multiplier) + " pts");
+
                 updateHud();
+                updateNumberTracker();
                 SoundManager.playAccept();
                 checkGameCompleted();
             } else {
@@ -186,14 +182,36 @@ public class GameView extends AbstractView {
                 mistakes++;
                 multiplier = Math.max(1, difficulty.getMultiplier() - (mistakes / 4));
                 statusLabel.setTextFill(Color.web("#e74c3c"));
-                statusLabel.setText("✗ Wrong! Multiplier reset. Mistakes: " + mistakes);
+                statusLabel.setText("Wrong Number! Mistakes: " + mistakes);
                 SoundManager.playFah();
                 updateHud();
             }
         });
     }
 
-    // --- Highlight helpers ---
+    // --- Tracker Logic ---
+    private void updateNumberTracker() {
+        int[] counts = new int[10]; // index 1-9
+        for (int r = 0; r < 9; r++) {
+            for (int c = 0; c < 9; c++) {
+                String text = cells[r][c].getText();
+                if (text != null && !text.isBlank()) {
+                    int val = Integer.parseInt(text);
+                    counts[val]++;
+                }
+            }
+        }
+
+        for (int i = 1; i <= 9; i++) {
+            if (counts[i] >= 9) {
+                numberLabels[i - 1].setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2ecc71;");
+            } else {
+                numberLabels[i - 1].setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #95a5a6;");
+            }
+        }
+    }
+
+    // --- Rest of your helper methods (highlighting, styling, timer, etc.) ---
     private void highlightMatching(String value) {
         if (value == null || value.isBlank()) return;
         clearAllHighlights();
@@ -211,69 +229,31 @@ public class GameView extends AbstractView {
         for (int r = 0; r < 9; r++) {
             for (int c = 0; c < 9; c++) {
                 TextField t = cells[r][c];
+                if (t == null) continue;
                 if (!t.isEditable()) applyPrefilledStyle(t);
                 else if (t.getText().isBlank()) applyEmptyStyle(t);
             }
         }
     }
 
-
     private void applyPrefilledStyle(TextField cell) {
-        cell.setStyle("""
-                -fx-background-color: rgba(255,255,255,0.12);
-                -fx-text-fill: #ecf0f1;
-                -fx-font-weight: bold;
-                -fx-font-size: 18px;
-                -fx-border-color: rgba(255,255,255,0.1);
-                -fx-border-radius: 4;
-                -fx-background-radius: 4;
-                """);
+        cell.setStyle("-fx-background-color: rgba(255,255,255,0.12); -fx-text-fill: #ecf0f1; -fx-font-weight: bold; -fx-font-size: 18px; -fx-border-color: rgba(255,255,255,0.1); -fx-border-radius: 4; -fx-background-radius: 4;");
     }
 
     private void applyEmptyStyle(TextField cell) {
-        cell.setStyle("""
-                -fx-background-color: rgba(255,255,255,0.05);
-                -fx-text-fill: #3498db;
-                -fx-font-size: 18px;
-                -fx-border-color: rgba(255,255,255,0.2);
-                -fx-border-radius: 4;
-                -fx-background-radius: 4;
-                """);
+        cell.setStyle("-fx-background-color: rgba(255,255,255,0.05); -fx-text-fill: #3498db; -fx-font-size: 18px; -fx-border-color: rgba(255,255,255,0.2); -fx-border-radius: 4; -fx-background-radius: 4;");
     }
 
     private void applyCorrectFlash(TextField cell) {
-        cell.setStyle("""
-                -fx-background-color: rgba(46,204,113,0.25);
-                -fx-text-fill: #2ecc71;
-                -fx-font-weight: bold;
-                -fx-font-size: 18px;
-                -fx-border-color: #2ecc71;
-                -fx-border-radius: 4;
-                -fx-background-radius: 4;
-                """);
+        cell.setStyle("-fx-background-color: rgba(46,204,113,0.25); -fx-text-fill: #2ecc71; -fx-font-weight: bold; -fx-font-size: 18px; -fx-border-color: #2ecc71; -fx-border-radius: 4; -fx-background-radius: 4;");
     }
 
     private void applyWrongFlash(TextField cell) {
-        cell.setStyle("""
-                -fx-background-color: rgba(231,76,60,0.2);
-                -fx-text-fill: #e74c3c;
-                -fx-font-size: 18px;
-                -fx-border-color: #e74c3c;
-                -fx-border-radius: 4;
-                -fx-background-radius: 4;
-                """);
+        cell.setStyle("-fx-background-color: rgba(231,76,60,0.2); -fx-text-fill: #e74c3c; -fx-font-size: 18px; -fx-border-color: #e74c3c; -fx-border-radius: 4; -fx-background-radius: 4;");
     }
 
     private void applyMatchHighlight(TextField cell) {
-        cell.setStyle("""
-                -fx-background-color: rgba(241,196,15,0.2);
-                -fx-text-fill: #f1c40f;
-                -fx-font-weight: bold;
-                -fx-font-size: 18px;
-                -fx-border-color: #f1c40f;
-                -fx-border-radius: 4;
-                -fx-background-radius: 4;
-                """);
+        cell.setStyle("-fx-background-color: rgba(241,196,15,0.2); -fx-text-fill: #f1c40f; -fx-font-weight: bold; -fx-font-size: 18px; -fx-border-color: #f1c40f; -fx-border-radius: 4; -fx-background-radius: 4;");
     }
 
     private void startTimer() {
@@ -314,7 +294,7 @@ public class GameView extends AbstractView {
 
         stopTimer();
         statusLabel.setTextFill(Color.web("#f1c40f"));
-        statusLabel.setText("🎉 Puzzle complete! Score: " + score + " | Time: " + formatTime(elapsedSeconds) + " | Mistakes: " + mistakes);
+        statusLabel.setText("Puzzle complete! Score: " + score + " | Time: " + formatTime(elapsedSeconds) + " | Mistakes: " + mistakes);
     }
 
     private void removeCells(int[][] board, int count) {

@@ -14,7 +14,6 @@ public class MainMenuView extends AbstractView {
 
     private Button playButton;
     private Button statsButton;
-    private Button optionsButton;
     private Button helpButton;
     private Button aboutButton;
 
@@ -27,13 +26,11 @@ public class MainMenuView extends AbstractView {
 
         playButton = new Button("Play");
         statsButton = new Button("Stats");
-        optionsButton = new Button("Options");
         helpButton = new Button("Help");
         aboutButton = new Button("About");
 
         styleButton(playButton);
         styleButton(statsButton);
-        styleButton(optionsButton);
         styleButton(helpButton);
         styleButton(aboutButton);
 
@@ -45,7 +42,7 @@ public class MainMenuView extends AbstractView {
 
         getChildren().addAll(
                 title, subtitle,
-                playButton, statsButton, optionsButton, helpButton, aboutButton);
+                playButton, statsButton, helpButton, aboutButton);
 
         this.setOpacity(0);
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(1.5), this);

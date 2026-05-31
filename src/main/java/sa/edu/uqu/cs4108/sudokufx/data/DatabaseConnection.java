@@ -1,6 +1,6 @@
 package sa.edu.uqu.cs4108.sudokufx.data;
 
-import sa.edu.uqu.cs4108.sudokufx.data.tables.LeaderboardTable;
+import sa.edu.uqu.cs4108.sudokufx.data.tables.ScoreTable;
 import sa.edu.uqu.cs4108.sudokufx.data.tables.SavedGameTable;
 
 import java.io.File;
@@ -19,7 +19,7 @@ public class DatabaseConnection {
 
     private static final List<DatabaseTable> tablesList = new ArrayList<>(
             List.of(
-                    new LeaderboardTable(),
+                    new ScoreTable(),
                     new SavedGameTable()
             )
     );

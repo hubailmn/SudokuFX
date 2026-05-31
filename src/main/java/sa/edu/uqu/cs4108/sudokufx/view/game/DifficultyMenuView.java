@@ -30,7 +30,7 @@ public class DifficultyMenuView extends AbstractView {
         }
 
         Button backBtn = new Button("Back");
-        styleButton(backBtn);
+        styleButton(backBtn, 150);
         backBtn.setOnAction(e -> nav.showMainMenu());
         getChildren().add(backBtn);
 

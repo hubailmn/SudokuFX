@@ -23,7 +23,11 @@ public abstract class AbstractView extends VBox {
     }
 
     public void styleButton(Button btn) {
-        btn.setMinWidth(220);
+        styleButton(btn, 220);
+    }
+
+    public void styleButton(Button btn, int width) {
+        btn.setMinWidth(width);
         btn.setStyle("""
                 -fx-background-color: rgba(255, 255, 255, 0.1);
                 -fx-text-fill: white;
