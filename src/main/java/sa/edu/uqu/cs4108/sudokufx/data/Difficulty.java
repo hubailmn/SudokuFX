@@ -15,16 +15,16 @@ public enum Difficulty {
         this.multiplier = multiplier;
     }
 
+    public static Difficulty fromString(String text) {
+        return Difficulty.valueOf(text.toUpperCase());
+    }
+
     public int getCellsToRemove() {
         return cellsToRemove;
     }
 
     public int getMultiplier() {
         return multiplier;
-    }
-
-    public static Difficulty fromString(String text) {
-        return Difficulty.valueOf(text.toUpperCase());
     }
 
 }

@@ -15,31 +15,29 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import sa.edu.uqu.cs4108.sudokufx.controller.SceneController;
 import sa.edu.uqu.cs4108.sudokufx.data.Difficulty;
+import sa.edu.uqu.cs4108.sudokufx.data.modal.ScoreModal;
+import sa.edu.uqu.cs4108.sudokufx.data.tables.ScoreTable;
 import sa.edu.uqu.cs4108.sudokufx.util.SoundManager;
 import sa.edu.uqu.cs4108.sudokufx.util.SudokuGenerator;
 import sa.edu.uqu.cs4108.sudokufx.view.AbstractView;
 
 public class GameView extends AbstractView {
 
-    private final Difficulty difficulty;
     private static final int DECAY_INTERVAL_SECONDS = 90;
-
+    private final Difficulty difficulty;
     private final TextField[][] cells = new TextField[9][9];
     private final int[][] solution;
 
     private final Label[] numberLabels = new Label[9];
-
-    private int elapsedSeconds = 0;
-    private int score = 0;
-    private int multiplier;
-    private int mistakes = 0;
-
     private final Label timerLabel = new Label();
     private final Label scoreLabel = new Label();
     private final Label multiplierLabel = new Label();
     private final Label mistakesLabel = new Label();
     private final Label statusLabel = new Label();
-
+    private int elapsedSeconds = 0;
+    private int score = 0;
+    private int multiplier;
+    private int mistakes = 0;
     private Timeline timer;
 
     public GameView(SceneController nav, Difficulty difficulty) {
@@ -295,6 +293,8 @@ public class GameView extends AbstractView {
         stopTimer();
         statusLabel.setTextFill(Color.web("#f1c40f"));
         statusLabel.setText("Puzzle complete! Score: " + score + " | Time: " + formatTime(elapsedSeconds) + " | Mistakes: " + mistakes);
+        ScoreModal scoreModal = new ScoreModal(score, difficulty, mistakes, elapsedSeconds);
+        ScoreTable.getInstance().saveScore(scoreModal);
     }
 
     private void removeCells(int[][] board, int count) {

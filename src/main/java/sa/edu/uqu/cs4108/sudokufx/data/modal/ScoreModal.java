@@ -5,14 +5,11 @@ import sa.edu.uqu.cs4108.sudokufx.data.Difficulty;
 public class ScoreModal {
 
     int id;
-
     long score;
-
     Difficulty difficulty;
-
     int mistakes;
-
     long time;
+    long achievedAt;
 
     public ScoreModal(int id, long score, Difficulty difficulty, int mistakes, long time) {
         this.id = id;
@@ -20,6 +17,23 @@ public class ScoreModal {
         this.difficulty = difficulty;
         this.mistakes = mistakes;
         this.time = time;
+        this.achievedAt = System.currentTimeMillis();
+    }
+
+    public ScoreModal(long score, Difficulty difficulty, int mistakes, long time) {
+        this(-1, score, difficulty, mistakes, time);
+    }
+
+    public ScoreModal() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public long getScore() {
@@ -52,5 +66,13 @@ public class ScoreModal {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public long getAchievedAt() {
+        return achievedAt;
+    }
+
+    public void setAchievedAt(long achievedAt) {
+        this.achievedAt = achievedAt;
     }
 }

@@ -7,8 +7,10 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import sa.edu.uqu.cs4108.sudokufx.data.Difficulty;
 import sa.edu.uqu.cs4108.sudokufx.view.MainMenuView;
+import sa.edu.uqu.cs4108.sudokufx.view.StatsView;
 import sa.edu.uqu.cs4108.sudokufx.view.game.DifficultyMenuView;
 import sa.edu.uqu.cs4108.sudokufx.view.game.GameView;
+import sa.edu.uqu.cs4108.sudokufx.view.help.AboutView;
 
 public class SceneController {
     private final StackPane root;
@@ -26,6 +28,16 @@ public class SceneController {
 
     public void showDifficultyMenu() {
         DifficultyMenuView view = new DifficultyMenuView(this);
+        switchTo(view);
+    }
+
+    public void showStatsMenu() {
+        StatsView view = new StatsView(this);
+        switchTo(view);
+    }
+
+    public void showAboutMenu() {
+        AboutView view = new AboutView(this);
         switchTo(view);
     }
 
@@ -48,4 +60,6 @@ public class SceneController {
         out.setOnFinished(e -> root.getChildren().remove(currentView));
         out.play();
     }
+
+
 }

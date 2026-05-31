@@ -1,7 +1,6 @@
 package sa.edu.uqu.cs4108.sudokufx.data;
 
 import sa.edu.uqu.cs4108.sudokufx.data.tables.ScoreTable;
-import sa.edu.uqu.cs4108.sudokufx.data.tables.SavedGameTable;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,15 +13,13 @@ import java.util.List;
 
 public class DatabaseConnection {
 
-    private Connection connection;
-    private static DatabaseConnection instance;
-
     private static final List<DatabaseTable> tablesList = new ArrayList<>(
             List.of(
-                    new ScoreTable(),
-                    new SavedGameTable()
+                    new ScoreTable()
             )
     );
+    private static DatabaseConnection instance;
+    private Connection connection;
 
     public DatabaseConnection() {
 //        dropTables();
@@ -41,15 +38,15 @@ public class DatabaseConnection {
 
     }
 
+    public static DatabaseConnection getInstance() {
+        return instance == null ? instance = new DatabaseConnection() : instance;
+    }
+
     private void dropTables() {
         tablesList.forEach(table -> {
             System.out.println("Dropping table " + table.getClass().getSimpleName());
             executeQuery("drop table if exists " + table.getName());
         });
-    }
-
-    public static DatabaseConnection getInstance() {
-        return instance == null ? instance = new DatabaseConnection() : instance;
     }
 
     public Connection getConnection() {

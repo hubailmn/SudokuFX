@@ -12,7 +12,7 @@ public class SudokuApp extends Application {
     public void start(Stage stage) {
         StackPane root = new StackPane();
 
-        Scene scene = new Scene(root, 800, 800);
+        Scene scene = new Scene(root, 800, 850);
         stage.setTitle("SudokuFX");
         stage.setScene(scene);
         stage.show();
